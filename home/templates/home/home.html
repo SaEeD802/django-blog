@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_partial %}
+{% load social_share %}
+{% load filters %}
+{% load my_template_tags %}
+{% block title %}
+    پُلی لاگ یه وبلاگ باحال
+{% endblock %}
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="main-banner header-text">
+        <div class="container-fluid">
+            <div class="owl-banner owl-carousel">
+
+                {% for article in articles %}
+                    <div class="item">
+                        <img style="height: 377.6px" src="{{ article.image.url }}" alt="{{ article.title }}">
+                        <div class="item-content">
+                            <div class="main-content">
+                                <div class="meta-category">
+                                    <span>{{ article.category.first }}</span>
+                                </div>
+                                <a href="{{ article.get_absolute_url }}"><h4>{{ article.title }}</h4></a>
+                                <ul class="post-info">
+                                    <li><a href="#">{{ article.author.username }}</a></li>
+                                    <li><a href="#">{{ article.created|date }}</a></li>
+                                    <li><a href="#">{{ article.comments.count }} comment</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Banner Ends Here -->
+    <section class="call-to-action">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="main-content">
+              <div class="row">
+                <div class="col-lg-8">
+                  <span>{% current_time "%Y-%m-%d" %}</span>
+                  <h4>Welcome to mt Weblog</h4>
+                </div>
+                <div class="col-lg-4">
+                  <div class="main-button">
+                    <a rel="nofollow" href="/" target="_parent">polylog</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-posts">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+
+                            {% for recent in recent_articles %}
+                                <div class="col-lg-12">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            <img style="height: 631px" src="{{ recent.image.url }}" alt="{{ recent.title }}">
+                                        </div>
+                                        <div class="down-content">
+                                            <span>Lifestyle</span>
+                                            <a href="{{ recent.get_absolute_url }}"><h4>{{ recent.title }}</h4></a>
+                                            <ul class="post-info">
+                                                <li><a href="#">{{ recent.author.get_full_name }}</a></li>
+                                                <li><a href="#">{{ recent.created|timesince }} پیش</a></li>
+                                                <li><a href="#">12 Comments</a></li>
+                                            </ul>
+{#                                            <p>{{ recent.body|truncatewords:30 }}</p>#}
+                                            <p>{{ recent.body|cutter:160 }}...</p>
+                                            <div class="post-options">
+                                                <div class="row">
+
+                                                    <div class="col-3">
+                                                        <ul class="post-share">
+                                                            <li><i class="fa fa-whatsapp"></i></li>
+                                                            <li>{% post_to_whatsapp articles.get_absolute_url "Whatsapp" %}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <ul class="post-share">
+                                                            <li><i class="fa fa-linkedin"></i></li>
+                                                            <li>{% post_to_linkedin articles.get_absolute_url "Linkdin" %}</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+                            <div class="col-lg-12">
+                                <div class="main-button">
+                                    <a href="{% url 'blog:article_list' %}">View All Posts</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% render_partial 'home:sidebar_partial' %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
